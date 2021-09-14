@@ -1,0 +1,83 @@
+<%-- any content can be specified here e.g.: --%>
+<%@ page pageEncoding="UTF-8" %>
+<%@page import="java.text.DecimalFormat"%>
+
+<h3>EXIBIÇÃO DE VALORES</h3>
+<section>
+<%
+   
+    DecimalFormat df = new DecimalFormat("0.00");
+    double vp = Double.parseDouble(request.getParameter("vp"));
+    double i = Double.parseDouble(request.getParameter("i"));
+    int n = Integer.parseInt(request.getParameter("n"));
+    double pagamento, div=0, S=0;
+    double vid[] = new double[n+1];
+    double A[] = new double[n+1];
+    double sd[] = new double[n+1];
+    double inv[] = new double[n+1];
+    i= i/100;
+    int c=n+1;
+    double d=0;
+    double x= 123.123;
+        for(int a=1; a <= n; a++){
+        pagamento = vp*(i/(1-(Math.pow((1+i),-a))));
+            if (a==n){
+                
+                div=div+pagamento;
+            }
+        }//esse é o pagamento=parcelas fixas, escolher o ultimo retorno
+        
+        S=S+vp;
+%><div id="m"><h3 class="q">MESES</h3><%for(int a=0; a <= n; a++){  
+        vid[a] = div*((Math.pow((1+i),a)-1)/(Math.pow((1+i),a)*1));
+        
+        out.println("<li>"+ a+"</li>");
+        
+}%></div><%
+%><div><h3 class="q">JUROS</h3><%for(int a=0; a <= n;a++){
+            if(a==0){
+                out.println("<li>0</li>");
+            }
+            else{
+            inv[a]= vid[c-1];
+            out.println("<li>" + df.format(inv[a]) + "</li>");
+            c--;
+            A[a]=div-inv[a];
+        
+        S=S-A[a];
+        sd[a]=S;
+            }
+}%></div><%
+        
+%><div><h3 class="q">SALDO DEVEDOR</h3><%for(int a=0; a<= n; a++){
+            if(a==0){
+                out.println("<li>" + df.format(vp) + "</li>");
+            }
+            else{
+            out.println("<li>" + df.format(sd[a]) + "</li>");
+            }
+           
+}%></div><%
+%><div><h3 class="q">PARCELAS</h3><% for(int a=0; a<= n; a++){
+            if(a==0){
+                out.println("<li>0</li>");
+            }
+            else{
+            out.println("<li>" + df.format(div) + "</li>"); 
+            }
+    }%></div><%
+        
+        
+%><div><h3 class="q">AMORTIZAÇÃO</h3><%for(int a=0; a<=n; a++){
+            if(a==0){
+                out.println("<li>0</li>");
+            }
+            else{
+            out.println("<li>" + df.format(A[a]) + "</li>"); 
+            }
+}%></div><%
+        
+
+    %>
+</section>
+    
